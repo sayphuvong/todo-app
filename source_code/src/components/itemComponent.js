@@ -29,26 +29,25 @@ class ListItem extends Component {
 
     isSelectedClass(){
         if(this.props.editing >= 0 && this.props.editing === this.props.index){
-            console.log('white');
             return "bg-secondary text-white";
         }else{
-            console.log('grey');
             return "bg-white";
         }
     }
 
-    // delete_handleClick(){
+    delete_handleClick(){
+        this.props.delete_handleClick(this.props.index);
+    }
 
-    // }
     render() {
-        console.log(this.props.editing)
+        // console.log(this.props.editing)
         return (
             <li className={this.isActived()} onClick={this.listItem_handleClick.bind(this)}>
                 <p className="row">{this.props.name}</p>
                 <div className="row tool position-absolute">
                     <button className={this.isSelectedClass.bind(this)()} onClick={this.edit_handleClick.bind(this)}><i className="fas fa-pen" /></button>
                     {this.isChecked.bind(this)()}
-                    <button className="bg-danger"><i className="fas fa-times"/></button>
+                    <button className="bg-danger" onClick={this.delete_handleClick.bind(this)}><i className="fas fa-times"/></button>
                 </div>
             </li>
         );

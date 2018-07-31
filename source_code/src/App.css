@@ -1,3 +1,8 @@
+header span{
+    color: #00c200;
+    font-size: .856rem;
+}
+
 .app-form input{
     border:1px solid #bbb; 
     height: 25px;

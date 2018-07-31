@@ -22,15 +22,16 @@ class TaskForm extends Component {
                     <input type="text" className="rounded-left" ref="txtTask" 
                         onChange={this.handleChange.bind(this)} value={this.props.txtTask}/>
                     <button onClick={this.handleClick.bind(this)} type="submit" className="btn rounded-right">
-                        {this.props.editing < 0 ? 
-                        <div>
-                            <i className="fas fa-plus"/> Add Task
-                        </div>
-                        :
-                        <div>
-                            <i className="fas fa-pen"/> Editing...
-                        </div>
-                    }
+                        {
+                        this.props.editing < 0 ? 
+                            <div>
+                                <i className="fas fa-plus"/> Add Task
+                            </div>
+                            :
+                            <div>
+                                <i className="fas fa-check"/> Done
+                            </div>
+                        }
                     </button>
                 </div> 
             </div>

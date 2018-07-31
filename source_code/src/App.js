@@ -12,7 +12,7 @@ class App extends Component {
       todo_list: tasks.item,
       txtTask: '',
       itemEditing: -1,
-      indexNewAction: -1
+      indexNewAction: 0
     }
   }
 
@@ -21,7 +21,10 @@ class App extends Component {
   }
 
   addTask_click(){
-    if(this.state.txtTask.trim() === ''){ return; }
+    if(this.state.txtTask.trim() === ''){
+      return;
+    }
+
     if(this.state.itemEditing < 0){
       let list = this.state.todo_list;
       list.push({
@@ -38,7 +41,8 @@ class App extends Component {
   }
 
   listItem_handleClick(key){
-    this.setState({indexNewAction: key});
+    if(this.state.itemEditing < 0)
+      this.setState({indexNewAction: key});
   }
 
   edit_handleClick(key){
@@ -61,7 +65,11 @@ class App extends Component {
     this.setState({todo_list: list});
   }
 
-  // delete_handleClick(key){ }
+  delete_handleClick(key){
+    const list = this.state.todo_list;
+    list.splice(key,1);
+    this.setState({todo_list: list});
+  }
 
   render() {
     let _todoList = this.state.todo_list;
@@ -69,18 +77,23 @@ class App extends Component {
       <div className="App">
       
         <div className="w-50 container">
-          <Title/>
+
+          <Title isEditing={this.state.itemEditing}/>
+
           <TaskForm 
             task_handleChange={this.input_handleChange.bind(this)} 
             txtTask={this.state.txtTask} 
             addTask_click={this.addTask_click.bind(this)}
             editing={this.state.itemEditing}/>
+
           <TaskList todoList={_todoList} 
             edit_handleClick={this.edit_handleClick.bind(this)}
             isChecked_handleClick={this.isChecked_handleClick.bind(this)}
             editing={this.state.itemEditing}
             indexNewAction={this.state.indexNewAction}
-            listItem_handleClick={this.listItem_handleClick.bind(this)}/>
+            listItem_handleClick={this.listItem_handleClick.bind(this)}
+            delete_handleClick={this.delete_handleClick.bind(this)}/>
+
         </div>
       </div>
     );

@@ -29,7 +29,8 @@ class TaskList extends Component {
                     edit_handleClick={this.props.edit_handleClick}
                     isChecked_handleClick={this.props.isChecked_handleClick}
                     editing={this.props.editing}
-                    listItem_handleClick={this.props.listItem_handleClick}/>
+                    listItem_handleClick={this.props.listItem_handleClick}
+                    delete_handleClick={this.props.delete_handleClick}/>
             );
         });
         return (
