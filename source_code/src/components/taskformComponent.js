@@ -8,7 +8,7 @@ class TaskForm extends Component {
             <div className="form-inline" id="task-form">
                 <input type="text" className="rounded-left" />
                 <button type="submit" className="btn rounded-right"><i className="fas fa-plus" /> Add Task</button>
-            </div>
+            </div> 
         </div>
     );
   }

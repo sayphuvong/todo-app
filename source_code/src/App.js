@@ -1,59 +1,45 @@
 import React, { Component } from 'react';
 import Title from './components/titleComponent';
 import TaskForm from './components/taskformComponent';
+import TaskList from './components/tasklistComponent';
 import './App.css';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      todo_list: [
+        {
+          name: "Cras justo odio Cras justo odio Cras justo odio Cras justo odio Cras justo odio Cras justo odio",
+          isChecked: true,
+          isActived: true
+        },
+        {
+          name: "Cras justo odio Cras justo odio Cras justo odio",
+          isChecked: false,
+          isActived: false
+        },
+        {
+          name: "Cras justo odio Cras justo odio Cras justo odio Cras justo odio",
+          isChecked: false,
+          isActived: false
+        },
+        {
+          name: "Cras justo odio Cras justo",
+          isChecked: false,
+          isActived: false
+        }
+      ]
+    }
+  }
   render() {
+    let _todoList = this.state.todo_list;
     return (
       <div className="App">
         <div className="w-50 container">
           <Title/>
           <TaskForm/>
-          <div className="todo-list">
-            <ul className="list-group w-75">
-              <li className="list-group-item position-relative active">
-                <p className="row">Cras justo odio Cras justo odio Cras justo odio Cras justo odio Cras justo odio Cras justo odio </p>
-                <div className="row tool position-absolute">
-                  <button className="bg-white"><i className="fas fa-pen" /></button>
-                  <button className="bg-primary"><i className="fas fa-spinner" /></button>
-                  <button className="bg-danger"><i className="fas fa-times" /></button>
-                </div>
-              </li>
-              <li className="list-group-item position-relative">
-                <p className="row">Cras justo odio</p> 
-                <div className="row tool position-absolute">
-                  <button className="bg-white"><i className="fas fa-pen" /></button>
-                  <button className="bg-primary"><i className="fas fa-check" /></button>
-                  <button className="bg-danger"><i className="fas fa-times" /></button>
-                </div>
-              </li>
-              <li className="list-group-item position-relative">
-                <p className="row">Cras justo odio </p> 
-                <div className="row tool position-absolute">
-                  <button className="bg-white"><i className="fas fa-pen" /></button>
-                  <button className="bg-primary"><i className="fas fa-check" /></button>
-                  <button className="bg-danger"><i className="fas fa-times" /></button>
-                </div>
-              </li>
-              <li className="list-group-item position-relative">
-                <p className="row">Cras justo odio</p>
-                <div className="row tool position-absolute">
-                  <button className="bg-white"><i className="fas fa-pen" /></button>
-                  <button className="bg-primary"><i className="fas fa-check" /></button>
-                  <button className="bg-danger"><i className="fas fa-times" /></button>
-                </div>
-              </li>
-              <li className="list-group-item position-relative">
-                <p className="row">Cras justo odio</p> 
-                <div className="row tool position-absolute">
-                  <button className="bg-white"><i className="fas fa-pen" /></button>
-                  <button className="bg-primary"><i className="fas fa-check" /></button>
-                  <button className="bg-danger"><i className="fas fa-times" /></button>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <TaskList todoList={_todoList}/>
         </div>
       </div>
     );
