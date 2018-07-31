@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Title from './components/titleComponent';
 import './App.css';
 
 class App extends Component {
@@ -6,9 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="w-50 container">
-          <header>
-            <h1 className="font-weight-normal">ToDo App</h1>
-          </header>
+          <Title/>
           <div className="app-form">
             <div className="form-inline" id="task-form">
               <input type="text" className="rounded-left" />
