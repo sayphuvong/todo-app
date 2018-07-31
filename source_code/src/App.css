@@ -1,0 +1,88 @@
+.app-form input{
+    border:1px solid #bbb; 
+    height: 25px;
+    width: 60%;
+    padding: 0 5px;
+    font-size: .825rem;
+}
+
+.app-form button{
+    height: 25px;
+    width: 15%;
+    line-height: 25px;
+    padding: 0;
+    text-align: center;
+    font-size: .825rem;
+    border-radius: 0;
+    border:1px solid #bbb; 
+    border-left: none;
+    background: none;
+}
+
+#task-form{
+    margin-bottom: 1rem;
+}
+
+.todo-list .list-group-item{
+    color: #555;
+    font-weight: 500;
+}
+
+.todo-list .list-group-item:hover{
+    cursor: pointer;
+}
+
+.todo-list .list-group-item.active{
+    background-color: #eee;
+    color: #555;
+    font-weight: 400;
+    border-color: rgba(0,0,0,.125);
+}
+.todo-list .list-group-item p{
+    margin-bottom: 1.5rem;
+}
+
+.todo-list .list-group-item .tool{
+    bottom: 0.5rem;
+    right: 1rem;
+}
+
+.todo-list .list-group-item .tool button{
+    border: 1px solid #ddd;
+    width: 2rem;
+    padding: 2px;
+    margin-right: 2px;
+}
+.todo-list .list-group-item .tool button:hover{
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px){
+    .container{
+        width: 100% !important;
+    }
+    .app-form input{
+        width: 70% !important;
+    }
+    .app-form button{
+        width: 30% !important;
+    }
+    .todo-list ul.list-group{
+        width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 359px){
+    .container{
+        width: 100% !important;
+    }
+    .app-form input{
+        width: 60% !important;
+    }
+    .app-form button{
+        width: 40% !important;
+    }
+    .todo-list ul.list-group{
+        width: 100% !important;
+    }
+}
