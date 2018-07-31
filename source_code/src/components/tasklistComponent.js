@@ -3,9 +3,6 @@ import ListItem from './itemComponent';
 // import './TaskList.css';
 
 class TaskList extends Component {
-    constructor(props){
-        super(props);
-    }
 
     // loadItems(){
     //     let list = this.props.todoList;

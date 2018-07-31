@@ -9,8 +9,6 @@ class Title extends Component {
     }
 
     render() {
-
-        console.log('title component: ' + this.props.isEditing);
         return (
             <header>
                 <h1 className="font-weight-normal">ToDo App {this.isEditing.bind(this)()}</h1>

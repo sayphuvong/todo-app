@@ -1,19 +1,56 @@
 import React, { Component } from 'react';
+import * as firebase from 'firebase';
+// import firebase from 'firebase/app';
+// import 'firebase/<PACKAGE>';
 import Title from './components/titleComponent';
 import TaskForm from './components/taskformComponent';
 import TaskList from './components/tasklistComponent';
-import tasks from './mocks/task';
+// import tasks from './mocks/task';
 import './App.css';
+
+
+const config = {
+  apiKey: "AIzaSyC98oDbVJ8xXQI5ZOY5GmyC5wE963vFDGw",
+  authDomain: "todo-app-29fd0.firebaseapp.com",
+  databaseURL: "https://todo-app-29fd0.firebaseio.com",
+  projectId: "todo-app-29fd0",
+  storageBucket: "todo-app-29fd0.appspot.com",
+  messagingSenderId: "176290396354"
+};
+
 
 class App extends Component {
   constructor(props){
     super(props);
+
+    this.app = firebase.initializeApp(config);
+    this.database = this.app.database().ref().child('item');
     this.state = {
-      todo_list: tasks.item,
+      todo_list: [],
       txtTask: '',
       itemEditing: -1,
       indexNewAction: 0
     }
+  }
+
+  componentDidMount(){
+
+    console.log('component did mounts');
+
+    const previousList = this.state.todo_list;
+
+    // ADD CHILD
+    this.database.on('child_added', snap => {
+      previousList.push({
+        id: snap.key,
+        name: snap.val().name,
+        isActived: snap.val().isActived,
+        isChecked: snap.val().isChecked
+      });
+      this.setState({todo_list: previousList});
+    });
+
+
   }
 
   input_handleChange(text){
@@ -25,18 +62,21 @@ class App extends Component {
       return;
     }
 
-    if(this.state.itemEditing < 0){
-      let list = this.state.todo_list;
-      list.push({
+    if(this.state.itemEditing < 0){ // ADD ITEM
+      this.database.push().set({
         name: this.state.txtTask,
         isChecked: false,
         isActived: false
       });
-      this.setState({todo_list: list, txtTask: '',});
-    } else{
+      this.setState({txtTask: ''});
+    } else{ // EDIT ITEM
       const list = this.state.todo_list;
-      list[this.state.itemEditing].name = this.state.txtTask;
-      this.setState({todo_list: list, txtTask: '', itemEditing: -1});
+      const key = list[this.state.itemEditing].id;
+      this.database.child(key).update({
+        name: this.state.txtTask,
+        isChecked: list[this.state.itemEditing].isChecked,
+        isActived: list[this.state.itemEditing].isActived,
+      });
     }
   }
 
@@ -46,7 +86,7 @@ class App extends Component {
   }
 
   edit_handleClick(key){
-    if(key != this.state.itemEditing){
+    if(key !== this.state.itemEditing){
       const list = this.state.todo_list;
       
       if(key < list.length){
@@ -73,6 +113,7 @@ class App extends Component {
 
   render() {
     let _todoList = this.state.todo_list;
+    // console.log(_todoList);
     return (
       <div className="App">
       
