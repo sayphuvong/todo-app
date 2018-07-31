@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Title from './components/titleComponent';
+import TaskForm from './components/taskformComponent';
 import './App.css';
 
 class App extends Component {
@@ -8,12 +9,7 @@ class App extends Component {
       <div className="App">
         <div className="w-50 container">
           <Title/>
-          <div className="app-form">
-            <div className="form-inline" id="task-form">
-              <input type="text" className="rounded-left" />
-              <button type="submit" className="btn rounded-right"><i className="fas fa-plus" /> Add Task</button>
-            </div>
-          </div>
+          <TaskForm/>
           <div className="todo-list">
             <ul className="list-group w-75">
               <li className="list-group-item position-relative active">
