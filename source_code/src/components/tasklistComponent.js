@@ -7,23 +7,29 @@ class TaskList extends Component {
         super(props);
     }
 
-    loadItems(){
-        let list = this.props.todoList;
-        let result = [];
-        for(let x in list){
-            console.log(list[x].name);
-            console.log(list[x].isChecked);
-            console.log(list[x].isActived);
-            result.push(<ListItem name={list[x].name} checked={list[x].isChecked} active={list[x].isActived}/>);
-        }
-        return result;
-    }
+    // loadItems(){
+    //     let list = this.props.todoList;
+    //     let result = [];
+    //     for(let x in list){
+    //         console.log(list[x].name);
+    //         console.log(list[x].isChecked);
+    //         console.log(list[x].isActived);
+    //         result.push(<ListItem name={list[x].name} checked={list[x].isChecked} active={list[x].isActived}/>);
+    //     }
+    //     return result;
+    // }
 
     render() {
         const list = this.props.todoList;
         const elementItem = list.map((value, index)=>{
             return (
-                <ListItem key={index} name={value.name} checked={value.isChecked} active={value.isActived}/>
+                <ListItem key={index} name={value.name} index={index} 
+                    checked={value.isChecked} 
+                    active={this.props.indexNewAction >= 0 &&  this.props.indexNewAction === index? true : false}
+                    edit_handleClick={this.props.edit_handleClick}
+                    isChecked_handleClick={this.props.isChecked_handleClick}
+                    editing={this.props.editing}
+                    listItem_handleClick={this.props.listItem_handleClick}/>
             );
         });
         return (
