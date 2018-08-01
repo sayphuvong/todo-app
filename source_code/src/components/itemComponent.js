@@ -17,6 +17,7 @@ class ListItem extends Component {
 
     edit_handleClick(){
         this.props.edit_handleClick(this.props.index);
+        this.props.setNodeId(this.props.nodeId);
     }
 
     listItem_handleClick(){
@@ -24,7 +25,8 @@ class ListItem extends Component {
     }
 
     isChecked_handleClick(){
-        this.props.isChecked_handleClick(this.props.index);
+        // console.log('is checked: ' + this.props.nodeId);
+        this.props.updateData('IS_CHECKED', this.props.nodeId);
     }
 
     isSelectedClass(){
@@ -36,7 +38,7 @@ class ListItem extends Component {
     }
 
     delete_handleClick(){
-        this.props.delete_handleClick(this.props.index);
+        this.props.deleteNode(this.props.nodeId);
     }
 
     render() {

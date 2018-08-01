@@ -19,28 +19,23 @@ class TaskList extends Component {
     render() {
         const list = this.props.todoList;
         const elementItem = list.map((value, index)=>{
+            // console.log('value id: ' + value.id);
             return (
-                <ListItem key={index} name={value.name} index={index} 
+                <ListItem key={index} name={value.name} index={index} nodeId={value.id}
                     checked={value.isChecked} 
                     active={this.props.indexNewAction >= 0 &&  this.props.indexNewAction === index? true : false}
                     edit_handleClick={this.props.edit_handleClick}
                     isChecked_handleClick={this.props.isChecked_handleClick}
                     editing={this.props.editing}
                     listItem_handleClick={this.props.listItem_handleClick}
-                    delete_handleClick={this.props.delete_handleClick}/>
+                    deleteNode={this.props.deleteNode}
+                    setNodeId={this.props.setNodeId}
+                    updateData={this.props.updateData}/>
             );
         });
         return (
             <div className="todo-list">
                 <ul className="list-group w-75">
-                    {/* <ListItem checked={true} active={false}/>
-                    <ListItem checked={false} active={true}/>
-                    <ListItem checked={true} active={false}/>
-                    <ListItem checked={false} active={true}/>
-                    <ListItem checked={true} active={false}/>
-                    <ListItem checked={false} active={true}/>
-                    <ListItem checked={true} active={true}/> */}
-                    {/* {this.loadItems()} */}
                     {elementItem}
                 </ul>
             </div>

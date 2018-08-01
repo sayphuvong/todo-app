@@ -29,68 +29,130 @@ class App extends Component {
       todo_list: [],
       txtTask: '',
       itemEditing: -1,
+      nodeId_Editing: undefined,
       indexNewAction: 0
     }
   }
 
   componentDidMount(){
-
-    console.log('component did mounts');
-
     const previousList = this.state.todo_list;
 
-    // ADD CHILD
-    this.database.on('child_added', snap => {
+    // SET LISTEN ON FOR ITEMS [LOAD ALL ITEM]
+    console.log(this.database);
+    this.database.orderByKey().once("value")
+      .then(snapshot => {
+        snapshot.forEach(childSnapshot => {
+          // SnapShot item child
+          this.database.child(childSnapshot.key).on('value', itemSnap => {
+            const index = previousList.findIndex(value => value.id === itemSnap.key);
+            if(index >=0 && itemSnap.val() !== null){
+              previousList[index].name = itemSnap.val().name;
+              previousList[index].isActived = itemSnap.val().isActived;
+              previousList[index].isChecked = itemSnap.val().isChecked;
+              that.setState({
+                todo_list: previousList, 
+                txtTask: '', 
+                itemEditing: -1
+              });
+            }
+          });
+        });
+    });
+
+
+    // LISTEN ON --- ADD CHILD
+    const that = this;
+    this.database.on('child_added', function(snap){
       previousList.push({
         id: snap.key,
         name: snap.val().name,
         isActived: snap.val().isActived,
         isChecked: snap.val().isChecked
       });
-      this.setState({todo_list: previousList});
+
+      that.setState({todo_list: previousList});
     });
 
 
-  }
+    // DELETE CHILD
+    this.database.on('child_removed', snap => {
+      for(var i=0;i < previousList.length; i++){
+        if(previousList[i].id === snap.key){
+          previousList.splice(i,1);
+        }
+      }
 
+      this.setState({
+        todo_list: previousList
+      });
+    });
+
+  } // END componentDidMount
+
+
+  updateData(updateType, nodeId, index){
+
+    if(updateType === 'NAME'){
+      this.database.child(nodeId).update({
+        name: this.state.txtTask
+      });
+    }
+
+    // if(updateType === 'IS_ACTIVED'){
+    //   this.database.child(nodeId).update({
+    //     isActived: null
+    //   });
+    // }
+
+    if(updateType === 'IS_CHECKED'){
+
+      this.database.child(nodeId).orderByKey().once("value").then(snap=>{
+        console.log(!snap.val().isChecked);
+        this.database.child(nodeId).update({
+          isChecked: !snap.val().isChecked
+        });
+      });
+
+    }
+
+  } // END updateData_Click
+
+
+  //GOOD
   input_handleChange(text){
     this.setState({txtTask: text});
   }
 
+
+  //GOOD
   addTask_click(){
     if(this.state.txtTask.trim() === ''){
       return;
     }
 
-    if(this.state.itemEditing < 0){ // ADD ITEM
-      this.database.push().set({
+    if(this.state.itemEditing < 0){
+      this.database.push().set({ // PUSH ITEM TO DATABASE
         name: this.state.txtTask,
         isChecked: false,
         isActived: false
       });
       this.setState({txtTask: ''});
-    } else{ // EDIT ITEM
-      const list = this.state.todo_list;
-      const key = list[this.state.itemEditing].id;
-      this.database.child(key).update({
-        name: this.state.txtTask,
-        isChecked: list[this.state.itemEditing].isChecked,
-        isActived: list[this.state.itemEditing].isActived,
-      });
     }
   }
 
-  listItem_handleClick(key){
+  //GOOD
+  listItem_handleClick(index){
     if(this.state.itemEditing < 0)
-      this.setState({indexNewAction: key});
+      this.setState({indexNewAction: index});
   }
 
-  edit_handleClick(key){
-    if(key !== this.state.itemEditing){
+  //GOOD
+  edit_handleClick(index){
+    if(index !== this.state.itemEditing){
       const list = this.state.todo_list;
       
-      if(key < list.length){
-        this.setState({txtTask: list[key].name, itemEditing: key});
+      if(index < list.length){
+        this.setState({txtTask: list[index].name, itemEditing: index, indexNewAction: index});
       }else{
         console.log('have error edit_handleClick in App.js : "key > list.length"');
       }
@@ -99,20 +161,25 @@ class App extends Component {
     }
   }
 
+  //GOOD
   isChecked_handleClick(key){
     const list = this.state.todo_list;
     list[key].isChecked = !list[key].isChecked;
     this.setState({todo_list: list});
   }
 
-  delete_handleClick(key){
-    const list = this.state.todo_list;
-    list.splice(key,1);
-    this.setState({todo_list: list});
+  //GOOD
+  deleteNode(noteId){
+    this.database.child(noteId).remove();
+  }
+
+  setNodeId(nodeId){
+    this.setState({nodeId_Editing: nodeId});
   }
 
   render() {
     let _todoList = this.state.todo_list;
+    // console.log('a');
     // console.log(_todoList);
     return (
       <div className="App">
@@ -125,7 +192,9 @@ class App extends Component {
             task_handleChange={this.input_handleChange.bind(this)} 
             txtTask={this.state.txtTask} 
             addTask_click={this.addTask_click.bind(this)}
-            editing={this.state.itemEditing}/>
+            updateData={this.updateData.bind(this)}
+            editing={this.state.itemEditing}
+            nodeId_Editing={this.state.nodeId_Editing}/>
 
           <TaskList todoList={_todoList} 
             edit_handleClick={this.edit_handleClick.bind(this)}
@@ -133,7 +202,9 @@ class App extends Component {
             editing={this.state.itemEditing}
             indexNewAction={this.state.indexNewAction}
             listItem_handleClick={this.listItem_handleClick.bind(this)}
-            delete_handleClick={this.delete_handleClick.bind(this)}/>
+            deleteNode={this.deleteNode.bind(this)}
+            setNodeId={this.setNodeId.bind(this)}
+            updateData={this.updateData.bind(this)}/>
 
         </div>
       </div>

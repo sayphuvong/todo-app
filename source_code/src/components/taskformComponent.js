@@ -6,8 +6,13 @@ class TaskForm extends Component {
     //     super(props);
     // }
 
-    handleClick(){
+    addTask_handleClick(){
         this.props.addTask_click()
+    }
+
+    editDone_handleClick(){
+        // console.log(this.props.nodeId_Editing);
+        this.props.updateData('NAME', this.props.nodeId_Editing);
     }
 
     handleChange(){
@@ -21,18 +26,12 @@ class TaskForm extends Component {
                 <div className="form-inline" id="task-form">
                     <input type="text" className="rounded-left" ref="txtTask" 
                         onChange={this.handleChange.bind(this)} value={this.props.txtTask}/>
-                    <button onClick={this.handleClick.bind(this)} type="submit" className="btn rounded-right">
                         {
-                        this.props.editing < 0 ? 
-                            <div>
-                                <i className="fas fa-plus"/> Add Task
-                            </div>
-                            :
-                            <div>
-                                <i className="fas fa-check"/> Done
-                            </div>
+                            this.props.editing < 0 ? 
+                                <button onClick={this.addTask_handleClick.bind(this)} type="submit" className="btn rounded-right"><i className="fas fa-plus"/> Add Task </button>
+                                :
+                                <button onClick={this.editDone_handleClick.bind(this)} type="submit" className="btn rounded-right"><i className="fas fa-check"/> Done </button>
                         }
-                    </button>
                 </div> 
             </div>
         );
