@@ -47,7 +47,7 @@ class App extends Component {
             const index = previousList.findIndex(value => value.id === itemSnap.key);
             if(index >=0 && itemSnap.val() !== null){
               previousList[index].name = itemSnap.val().name;
-              previousList[index].isActived = itemSnap.val().isActived;
+              // previousList[index].isActived = itemSnap.val().isActived;
               previousList[index].isChecked = itemSnap.val().isChecked;
               that.setState({
                 todo_list: previousList, 
@@ -66,7 +66,7 @@ class App extends Component {
       previousList.push({
         id: snap.key,
         name: snap.val().name,
-        isActived: snap.val().isActived,
+        // isActived: snap.val().isActived,
         isChecked: snap.val().isChecked
       });
 
@@ -90,7 +90,7 @@ class App extends Component {
   } // END componentDidMount
 
 
-  updateData(updateType, nodeId, index){
+  updateData(updateType, nodeId){
 
     if(updateType === 'NAME'){
       this.database.child(nodeId).update({
@@ -98,20 +98,15 @@ class App extends Component {
       });
     }
 
-    // if(updateType === 'IS_ACTIVED'){
-    //   this.database.child(nodeId).update({
-    //     isActived: null
-    //   });
-    // }
-
     if(updateType === 'IS_CHECKED'){
-
-      this.database.child(nodeId).orderByKey().once("value").then(snap=>{
-        console.log(!snap.val().isChecked);
-        this.database.child(nodeId).update({
-          isChecked: !snap.val().isChecked
+      if(this.state.itemEditing < 0){
+        this.database.child(nodeId).orderByKey().once("value").then(snap=>{
+          console.log(!snap.val().isChecked);
+          this.database.child(nodeId).update({
+            isChecked: !snap.val().isChecked
+          });
         });
-      });
+     }
 
     }
 
@@ -133,8 +128,9 @@ class App extends Component {
     if(this.state.itemEditing < 0){
       this.database.push().set({ // PUSH ITEM TO DATABASE
         name: this.state.txtTask,
-        isChecked: false,
-        isActived: false
+        isChecked: false
+        // isChecked: false,
+        // isActived: false
       });
       this.setState({txtTask: ''});
     }
@@ -162,15 +158,9 @@ class App extends Component {
   }
 
   //GOOD
-  isChecked_handleClick(key){
-    const list = this.state.todo_list;
-    list[key].isChecked = !list[key].isChecked;
-    this.setState({todo_list: list});
-  }
-
-  //GOOD
   deleteNode(noteId){
-    this.database.child(noteId).remove();
+    if(this.state.itemEditing < 0)
+        this.database.child(noteId).remove();
   }
 
   setNodeId(nodeId){
@@ -179,8 +169,6 @@ class App extends Component {
 
   render() {
     let _todoList = this.state.todo_list;
-    // console.log('a');
-    // console.log(_todoList);
     return (
       <div className="App">
       
@@ -198,7 +186,6 @@ class App extends Component {
 
           <TaskList todoList={_todoList} 
             edit_handleClick={this.edit_handleClick.bind(this)}
-            isChecked_handleClick={this.isChecked_handleClick.bind(this)}
             editing={this.state.itemEditing}
             indexNewAction={this.state.indexNewAction}
             listItem_handleClick={this.listItem_handleClick.bind(this)}

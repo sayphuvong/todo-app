@@ -11,13 +11,11 @@ class TaskForm extends Component {
     }
 
     editDone_handleClick(){
-        // console.log(this.props.nodeId_Editing);
         this.props.updateData('NAME', this.props.nodeId_Editing);
     }
 
     handleChange(){
         this.props.task_handleChange(this.refs.txtTask.value);
-        // console.log(this.props.txtTask);
     }
 
     render() {
